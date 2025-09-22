@@ -1,8 +1,4 @@
-### Login to npm
+### To release to NPM just push a tag
 
-npm login
-
-### Login to npm
-
-npm publish --access public
-
+git tag v1.0.0
+git push origin v1.0.0

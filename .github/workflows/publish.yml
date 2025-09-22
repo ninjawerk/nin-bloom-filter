@@ -1,0 +1,30 @@
+name: Publish to npm
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - run: npm ci
+
+      # Authenticate with npm
+      - run: npm config set //registry.npmjs.org/:_authToken=${NPM_TOKEN}
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # Publish package (creates package if it doesn't exist)
+      - run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
